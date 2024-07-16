@@ -50,7 +50,12 @@ export class PostsService {
       });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  // TODO: for admin and author
+  async remove(id: number) {
+    await this.prisma.post.delete({ where: { id: id } }).catch(() => {
+      throw new NotFoundException();
+    });
+
+    return;
   }
 }
