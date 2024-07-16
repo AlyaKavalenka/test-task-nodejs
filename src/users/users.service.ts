@@ -7,6 +7,9 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
+  // TODO: refactor when add auth
+  // TODO: check if exist
+  // TODO: hash password
   async create(createUserDto: CreateUserDto) {
     return await this.prisma.user.create({ data: createUserDto });
   }
@@ -16,8 +19,12 @@ export class UsersService {
     return await this.prisma.user.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    return await this.prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+    });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
