@@ -7,13 +7,13 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    return await this.prisma.user.create({ data: createUserDto });
   }
 
-  findAll() {
+  async findAll() {
     // TODO: check role
-    return this.prisma.user.findMany();
+    return await this.prisma.user.findMany();
   }
 
   findOne(id: number) {
