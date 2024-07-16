@@ -15,7 +15,11 @@ export class PostsService {
   }
 
   async findAll() {
-    return await this.prisma.post.findMany();
+    const posts = await this.prisma.post.findMany();
+
+    return posts.length
+      ? posts.map((post) => ({ id: post.id, title: post.title }))
+      : [];
   }
 
   findOne(id: number) {
