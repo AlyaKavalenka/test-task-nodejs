@@ -8,14 +8,14 @@ export class PostsService {
   constructor(private prisma: PrismaService) {}
 
   // TODO: check auth
-  create(createPostDto: CreatePostDto) {
-    return this.prisma.post.create({
+  async create(createPostDto: CreatePostDto) {
+    return await this.prisma.post.create({
       data: { ...createPostDto, userId: +createPostDto.userId },
     });
   }
 
-  findAll() {
-    return `This action returns all posts`;
+  async findAll() {
+    return await this.prisma.post.findMany();
   }
 
   findOne(id: number) {
