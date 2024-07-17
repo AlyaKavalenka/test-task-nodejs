@@ -38,6 +38,7 @@ export class PostsService {
   }
 
   async update(id: number, updatePostDto: UpdatePostDto) {
+    // TODO: check userId
     return await this.prisma.post
       .update({
         where: {
@@ -50,7 +51,7 @@ export class PostsService {
       });
   }
 
-  // TODO: for admin and author
+  // TODO: for author
   async remove(id: number) {
     await this.prisma.post.delete({ where: { id: id } }).catch(() => {
       throw new NotFoundException();
