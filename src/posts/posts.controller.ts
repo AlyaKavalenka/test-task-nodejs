@@ -14,6 +14,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { Roles } from 'src/auth/roles.decorator';
 import { Public } from 'src/auth/public.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -43,8 +44,8 @@ export class PostsController {
     return this.postsService.update(+id, updatePostDto);
   }
 
-  @UseGuards(JwtAuthGuard, Roles)
-  @Roles('admin', 'user')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.postsService.remove(+id);
