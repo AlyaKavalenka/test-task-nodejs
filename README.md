@@ -1,36 +1,49 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Nest.js + Prisma + PostgreSQL API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This project API. Stack: Nest.js, Prisma and PostgreSQL. Include authentication with jwt and role model.
 
 ## Installation
 
-```bash
-$ npm install
-```
+1. **Clone repository**
+
+    ```bash
+    $ git clone https://github.com/AlyaKavalenka/test-task-nodejs.git
+    $ cd test-task-nodejs
+    ```
+2. **Install dependencies**
+    ```bash
+    $ npm install
+    ```
+3. **If you're using docker for postgreSQL**
+    
+    Start the PostgreSQL container
+    ```bash
+    $ docker-compose up -d
+    ```
+
+
+4. **Configure the database**
+    Create a .env file in the root directory of the project and add the following environment variables:
+    ```
+    DATABASE_URL="postgresql://<username>:<password>@<host>:<port>/<database_name>?schema=public"
+    AUTH_SECRET=<your_jwt_secret>
+    DB_PORT=<your_database_port>
+    DB_USERNAME=<your_database_username>
+    DB_PASSWORD=<your_database_password>
+    ```
+5. **Setup Prisma**
+
+    Generate the Prisma client:
+    ```bash
+    npx prisma generate
+    ```
+6. **Run migrations**
+   
+    Apply the migrations to the database:
+
+    ```bash
+    npx prisma migrate dev --name init
+    ```
 
 ## Running the app
 
@@ -58,16 +71,87 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+# Using the API
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Authentication
+  
+  ```bash
+  # Register
+  Post /auth/register
+  {
+    "email": "user@example.com",
+    "password": "password"
+  }
 
-## Stay in touch
+  # Login
+  POST /auth/login
+   {
+     "email": "user@example.com",
+     "password": "password"
+   }
+  ```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Users
 
-## License
+```bash
+# Get all users (admin only)
+GET /users?page=5
+Authorization: Bearer <your_jwt_token>
 
-Nest is [MIT licensed](LICENSE).
+# Get user profile (admin and the user themselves)
+GET /users/:id
+Authorization: Bearer <your_jwt_token>
+
+# Update user profile (admin and the user themselves)
+PUT /users/:id
+Authorization: Bearer <your_jwt_token>
+
+{
+  "email": "user@example.com",
+  "password": "newpassword"
+}
+
+# Delete user (admin and the user themselves)
+DELETE /users/:id
+Authorization: Bearer <your_jwt_token>
+```
+
+## Posts
+
+```bash
+# Create a new post (authenticated users)
+POST /posts
+Authorization: Bearer <your_jwt_token>
+
+{
+  "title": "Post Title",
+  "content": "Post Content",
+  "userId": <number>
+}
+
+# Get all posts
+GET /posts?page=5
+
+# Get post details
+GET /posts/:id
+
+# Update a post (post author)
+PUT /posts/:id
+Authorization: Bearer <your_jwt_token>
+
+{
+  "title": "Updated Post Title",
+  "content": "Updated Post Content"
+}
+
+# Delete a post (admin and post author)
+DELETE /posts/:id
+Authorization: Bearer <your_jwt_token>
+```
+
+# Stay in touch
+This README file includes instructions for setting up PostgreSQL using Docker Compose. If you have any further questions or need more details, please let me know!
+
+- Author - [Alina Kavalenka](https://github.com/AlyaKavalenka)
+- [![Linkedin Badge](https://img.shields.io/badge/-Alina-0077b5?style=flat&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/alina-kavalenka-aa8979180/)  
+- [![Mail Badge](https://img.shields.io/badge/-kovalenkoalinam@gmail.com-c71610?style=flat&logo=gmail&logoColor=white)](mailto:kovalenkoalinam@gmail.com)
