@@ -11,11 +11,11 @@ import {
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { Roles } from 'src/auth/roles.decorator';
-import { Public } from 'src/auth/public.decorator';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/roles.guard';
-import { PostOwnerGuard } from 'src/auth/post-owner.guard';
+import { Roles } from '../auth/roles.decorator';
+import { Public } from '../auth/public.decorator';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { PostOwnerGuard } from '../auth/post-owner.guard';
 
 @Controller('posts')
 export class PostsController {
