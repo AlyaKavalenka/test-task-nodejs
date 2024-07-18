@@ -7,7 +7,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class PostsService {
   constructor(private prisma: PrismaService) {}
 
-  // TODO: check auth
   async create(createPostDto: CreatePostDto) {
     return await this.prisma.post.create({
       data: { ...createPostDto, userId: +createPostDto.userId },
@@ -38,20 +37,18 @@ export class PostsService {
   }
 
   async update(id: number, updatePostDto: UpdatePostDto) {
-    // TODO: check userId
     return await this.prisma.post
       .update({
         where: {
           id: id,
         },
-        data: { ...updatePostDto, userId: +updatePostDto.userId },
+        data: { ...updatePostDto },
       })
       .catch(() => {
         throw new NotFoundException();
       });
   }
 
-  // TODO: for author
   async remove(id: number) {
     await this.prisma.post.delete({ where: { id: id } }).catch(() => {
       throw new NotFoundException();
