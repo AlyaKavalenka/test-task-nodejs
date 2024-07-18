@@ -13,8 +13,11 @@ export class PostsService {
     });
   }
 
-  async findAll() {
-    const posts = await this.prisma.post.findMany();
+  async findAll(page: number) {
+    const posts = await this.prisma.post.findMany({
+      take: 4,
+      skip: 4 * ((+page || 1) - 1),
+    });
 
     return posts.length
       ? posts.map((post) => ({ id: post.id, title: post.title }))
