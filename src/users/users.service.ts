@@ -7,8 +7,11 @@ import * as bcrypt from 'bcryptjs';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
-    return await this.prisma.user.findMany();
+  async findAll(page: number) {
+    return await this.prisma.user.findMany({
+      take: 4,
+      skip: 4 * ((+page || 1) - 1),
+    });
   }
 
   async findOne(id: number) {

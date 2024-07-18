@@ -6,6 +6,7 @@ import {
   Delete,
   Put,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -21,8 +22,8 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query() query: { page: string }) {
+    return this.usersService.findAll(+query.page);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard, OwnerGuard)
